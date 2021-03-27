@@ -82,6 +82,23 @@ grep -n 'Zlib.output_compression' /etc/php/7.2/cli/php.ini
 sudo systemctl restart php7.2-fpm
 ```
 
+### Install MySQL 5.7
+
+```shell
+# Check for the available version on the Repositories.
+sudo apt-cache policy mysql-server
+# Install MYSQL.
+sudo apt install -y mysql-server mysql-client
+# Check MYSQL server status.
+sudo systemctl status mysql.service
+# Start MYSQL server
+sudo systemctl start mysql.service
+# Secure the installation
+sudo mysql_secure_installation
+#Test the MYSQL.
+sudo mysql -u root -p
+```
+
 ## References
 
 - [SWAP Memory](https://medium.com/@ravinandan.db/how-to-use-aws-free-tier-to-deploy-magento2-for-learning-purpose-32831531b18b)
