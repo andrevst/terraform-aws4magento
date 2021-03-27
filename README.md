@@ -6,50 +6,27 @@ This repo creates an infrastructure to host Magento 2 application on AWS Thisinf
 
 ## Pre Requisites
 
+- Terraform
 - Ubuntu LTS
   - sudo Privileges
 - PHP 7.2
 
-### PHP 7.2
+## Install Magento on AWS t2.micro
 
-Magento 2.3 works on PHP 7 so for safety and quality we will use it
+This is the step-by-step to configure it mannualy. So first, SSH on the VM.
 
-#### Install Modules
+### Increase RAM size of t2.micro using swap storage
 
-The following Modules are required to install our magento solution in a Ubuntu Server
-
-- php7.2-fpm
-- php7.2-gd
-- php7.2-mysql
-- php7.2-curl
-- php7.2-intl
-- php7.2-xsl
-- php7.2-mbstring
-- php7.2-zip
-- php7.2-bcmath
-- php7.2-opcache
+t2.Micro has 1 GB of RAM, Magento needs at least 2GB so we will use Swap Storage to add more 3GB to it.
 
 ```shell
-# To install PHP 7.2 and all dependencies
-sudo apt-get install php7.2-fpm php7.2-common php7.2-gd php7.2-mysql php7.2-curl php7.2-intl php7.2-xsl php7.2-mbstring php7.2-zip php7.2-bcmath php7.2-soap php7.2-opcache
-
-# Define PHP configs
-#memory limit
-sudo sed -i "s/memory_limit = . */memory_limit = 768M/" /etc/php/7.2/fpm/php.ini
-# max file size
-sudo sed -i "s/framework_max_filesize = . */upload_max_filesize = 128M/" /etc/php/7.2/fpm/php.ini
-# zlip output
-sudo sed -i "s/zlib.output_compression = . */Zlib.output_compression = em/" /etc/php/7.2/fpm/php.ini
-# max execution time
-sudo sed -i "s/max_execution_time = */max_execution_time = 18000/" /etc/php/7.2/fpm/php.ini
-# Check all with 
-grep -n 'memory_limit\|upload_max_filesize\|Zlib.output_compression\|max_execution_time' /etc/php/7.2/fpm/php.ini
+sudo fallocate -l 3G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
 ```
-
-#### Intall Composer
-
-> Composer is a PHP package manager
 
 ## References
 
 - [PHP 7.2](https://www.php.net/releases/7_2_0.php)
+- [SWAP Memory](https://medium.com/@ravinandan.db/how-to-use-aws-free-tier-to-deploy-magento2-for-learning-purpose-32831531b18b)
