@@ -26,7 +26,21 @@ sudo mkswap /swapfile
 sudo swapon /swapfile
 ```
 
+### Install NGINX
+
+We will use [NGNIX](https://www.nginx.com/), a  Web Server and used as a reverse proxy, HTTP cache, load balancer, and mail proxy, etc.
+
+```shell
+# First available Nginx version on repositories. 
+sudo apt-cache policy nginx
+# Then install Nginx.
+sudo apt-get -y install nginx
+# Make sure it is online
+sudo systemctl start nginx.service
+# Check it
+sudo systemctl status nginx.service
+```
+
 ## References
 
-- [PHP 7.2](https://www.php.net/releases/7_2_0.php)
 - [SWAP Memory](https://medium.com/@ravinandan.db/how-to-use-aws-free-tier-to-deploy-magento2-for-learning-purpose-32831531b18b)
