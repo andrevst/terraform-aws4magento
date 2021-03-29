@@ -63,21 +63,15 @@ sudo php -me
 # RAM allocation.
 sudo sed -i "s/memory_limit = .*/memory_limit = 2048M/" /etc/php/7.2/fpm/php.ini
 sudo sed -i "s/memory_limit = .*/memory_limit = 2048M/" /etc/php/7.2/cli/php.ini
-# Check it
-grep -n 'memory_limit' /etc/php/7.2/fpm/php.ini
-grep -n 'memory_limit' /etc/php/7.2/cli/php.ini
 # Execution time.
 sudo sed -i "s/max_execution_time = .*/max_execution_time  = 1800/" /etc/php/7.2/fpm/php.ini
 sudo sed -i "s/max_execution_time = .*/max_execution_time  = 1800/" /etc/php/7.2/cli/php.ini
-# Check it
-grep -n 'max_execution_time' /etc/php/7.2/fpm/php.ini
-grep -n 'max_execution_time' /etc/php/7.2/cli/php.ini
 # Zlib compression
 sudo sed -i "s/zlib.output_compression = .*/zlib.output_compression = 0/" /etc/php/7.2/fpm/php.ini
 sudo sed -i "s/zlib.output_compression = .*/zlib.output_compression = 0/" /etc/php/7.2/cli/php.ini
-# Check it
-grep -n 'Zlib.output_compression' /etc/php/7.2/fpm/php.ini
-grep -n 'Zlib.output_compression' /etc/php/7.2/cli/php.ini
+# Check it all
+grep -n 'memory_limit\|upload_max_filesize\|Zlib.output_compression\|max_execution_time' /etc/php/7.2/fpm/php.ini
+grep -n 'memory_limit\|Zlib.output_compression\|max_execution_time' /etc/php/7.2/cli/php.ini
 # Restart PHP to changes takes effect
 sudo systemctl restart php7.2-fpm
 ```
@@ -97,6 +91,70 @@ sudo systemctl start mysql.service
 sudo mysql_secure_installation
 #Test the MYSQL.
 sudo mysql -u root -p
+```
+
+### Install Magento
+
+#### Install Composer
+
+```shell
+sudo apt install composer
+```
+
+#### Create Deploy user and directory
+
+```shell
+# Create user
+sudo adduser deploy
+# Create webapp folder
+sudo mkdir -p /var/www/html/webapp
+# Change the folder permissions
+sudo chown -R deploy:www-data /var/www/html/webapp
+cd /var/www/html/webapp
+
+```
+
+#### Install Magento with composer using deply user
+
+```shell
+# Use deploy
+sudo su deploy
+# Install Magento
+composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.3.0 .
+```
+
+#### Configuring Nginx
+
+```shell
+# Create a new virtual host for the Magento site with a sample Nginx configuration file
+sudo cp /var/www/html/webapp/nginx.conf.sample /etc/nginx/magento.conf
+# Create a virtual host configuration file called “magento”
+sudo nano /etc/nginx/sites-available/magento
+```
+
+- Add the following contents to the file. Make sure to replace your domain name in place of magentotest.fosslinux.com in the below text.
+
+```json
+  upstream fastcgi_backend {
+     server  unix:/run/php/php7.2-fpm.sock;
+ }
+server {
+listen 80;
+     server_name magentotest.andrevst.dev;
+     set $MAGE_ROOT /var/www/html/webapp;
+     include /etc/nginx/magento.conf;
+ }
+ ```
+
+Save and exit the file.
+
+```shell
+# Enable the virtual host.
+sudo ln -s /etc/nginx/sites-available/magento /etc/nginx/sites-enabled
+# Verify nginx syntax.
+sudo nginx -t
+# Restart Nginx service.
+sudo systemctl restart nginx
 ```
 
 ## References
