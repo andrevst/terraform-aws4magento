@@ -10,6 +10,10 @@ variable "secret_key" {
   type = string
 }
 
+variable "ami" {
+  default = "ami-0663c8300ef945e88"			#Enter ubuntu18.04 or ubuntu20.04 AMI
+}
+
 variable "type" {
   default = "t2.micro"			#Enter Instance Type (ex - t2.micro)
 }
