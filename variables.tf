@@ -4,11 +4,13 @@
  
 variable "access_key" {
   type = string
+  default = ""
 }
 
 variable "secret_key" {
   type = string
-}
+  default = ""
+  }
 
 variable "ami" {
   default = "ami-0663c8300ef945e88"			#Enter ubuntu18.04 or ubuntu20.04 AMI
@@ -34,6 +36,14 @@ variable "pem_file" {
   default = "terraforming-magento.pem"			#Enter Path of pem file
 }
  
-variable "ec2_tag" {
-  default = "test-magento-server"			#Give name to EC2 instance
+variable "app_tag" {
+  default = "test-magento-server"
+}
+
+variable "varnish_tag" {
+  default = "test-cache-server"
+}
+
+variable "security_name" {
+  default = "magento-test-sg"
 }

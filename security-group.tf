@@ -1,7 +1,7 @@
 #security-group.tf
  
 resource "aws_security_group" "Security_Group" {
-  name = "Security-Group"
+  name = var.security_name
   description = "Allowing ssh and http traffic"
  
   ingress {
