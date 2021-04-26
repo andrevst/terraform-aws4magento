@@ -15,9 +15,8 @@ This repo creates an infrastructure to host Magento 2 application on AWS The inf
 - Terraform
 - A domain
 
-### Local setup
 
-### Online setup
+### Setup
 
 1. Create or access an AWS Account
 2. Configure an IAM user
@@ -30,6 +29,13 @@ This repo creates an infrastructure to host Magento 2 application on AWS The inf
 ## Install Magento on AWS t2.micro
 
 This is the step-by-step to configure it mannualy. So first, SSH on the VM.
+
+Update and upgrade it
+
+```shell
+sudo apt-get update
+sudo apt-get -y upgrade
+```
 
 ### Increase RAM size of t2.micro using swap storage
 
@@ -130,7 +136,7 @@ cd /var/www/html/webapp
 
 ```
 
-#### Install Magento with composer using deply user
+#### Install Magento with composer using deploy user
 
 ```shell
 # Use deploy
@@ -145,7 +151,7 @@ composer create-project --repository=https://repo.magento.com/ magento/project-c
 # Create a new virtual host for the Magento site with a sample Nginx configuration file
 sudo cp /var/www/html/webapp/nginx.conf.sample /etc/nginx/magento.conf
 # Create a virtual host configuration file called “magento”
-sudo nano /etc/nginx/sites-available/magento
+sudo vim /etc/nginx/sites-available/magento
 ```
 
 - Add the following contents to the file. Make sure to replace your domain name in place of magentotest.fosslinux.com in the below text.
@@ -156,7 +162,7 @@ sudo nano /etc/nginx/sites-available/magento
  }
 server {
 listen 80;
-     server_name magentotest.andrevst.dev;
+     server_name ec2-3-128-124-87.us-east-2.compute.amazonaws.com;
      set $MAGE_ROOT /var/www/html/webapp;
      include /etc/nginx/magento.conf;
  }
@@ -176,3 +182,17 @@ sudo systemctl restart nginx
 ## References
 
 - [SWAP Memory](https://medium.com/@ravinandan.db/how-to-use-aws-free-tier-to-deploy-magento2-for-learning-purpose-32831531b18b)
+- [Magento on LEMP](https://www.fosslinux.com/5921/how-to-install-and-configure-magento-2-3-0-on-ubuntu-18-04.htm)
+https://devdocs.magento.com/guides/v2.4/install-gde/prereq/nginx.html
+https://www.simicart.com/blog/magento-2-nginx/
+https://docs.aws.amazon.com/amplify/latest/userguide/to-add-a-custom-domain-managed-by-google-domains.html
+https://github.com/terraform-aws-modules/terraform-aws-elb/blob/master/examples/complete/main.tf
+https://techexpert.tips/varnish/varnish-nginx-installation-ubuntu/
+https://secureanycloud.com/enterprise-webserver-with-nginx-varnish-technical-support-cloud-help-azure-aws-opensource-cognosys/
+https://magecomp.com/blog/setup-varnish-for-magento-2-on-ec2-server/
+https://stackoverflow.com/questions/13895933/nginx-emerg-could-not-build-the-server-names-hash-you-should-increase-server
+https://adepapa.com/how-to-install-magento-2-on-ubuntu-20-04-using-linux-nginx-php-and-mysql-lemp-stack-on-aws/
+https://medium.com/@vincentteyssier/install-magento-2-3-2-3f0a5b2945c4
+https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+
+˜such as Jon Snow, I know nothing about Magento. But˜
